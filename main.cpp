@@ -22,7 +22,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char preKeys[256] = {0};
 
 
-	Ball ball(10.0f, 25.0f, 25.0f, 0.0f , 10.0f,9.8f, 300.0f , 200.0f, 0.5f, 0.3f);
+	Ball ball(10.0f, 25.0f, 25.0f, 0.3f, 10.0f,9.8f, 300.0f , 200.0f, 0.5f, 0.3f);
 	Surface concrete(0.5f, 0.3f);
 
 
@@ -111,8 +111,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		ImGui::SliderFloat("floor Friction", &concrete.friction, 0.0f, 1.0f, "Friction = %.3f");
 		ImGui::SliderFloat("ball Restitution", &ball.restitution, 0.0f, 1.0f, "Restitution = %.3f");
 		ImGui::SliderFloat("ball Friction", &ball.friction, 0.0f, 1.0f, "Friction = %.3f");
-		ImGui::SliderFloat("ball velocityX", &ball.restitution, 0.0f, 10.0f, "velocityX = %.3f");
-		ImGui::SliderFloat("ball velocityY", &ball.friction, 0.0f, 10.0f, "velocityY = %.3f");
+		ImGui::SliderFloat("ball velocityX", &ball.velocityX, 0.0f, 10.0f, "velocityX = %.3f");
+		//ImGui::SliderFloat("ball velocityY", &ball.velocityY, 0.0f, 10.0f, "velocityY = %.3f");
 		ImGui::End();
 
 		///
