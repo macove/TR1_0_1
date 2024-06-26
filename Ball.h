@@ -1,9 +1,12 @@
 #pragma once
 #include <iostream>
 #include <cmath>
-#include "Surface.h"
-#include <chrono>
-#include <thread>
+#include <Input.h>
+
+typedef struct {
+    float restitution; 
+    float friction;    
+} Surface;
 
 class Ball
 {
@@ -18,8 +21,6 @@ public:
     float gravity;
     float positionX;
     float positionY;
-    float restitution;  
-    float friction;
     bool bouncing;
     float initialRadiusX; 
     float initialRadiusY;
@@ -27,7 +28,10 @@ public:
     float range;
     float segments;
     float frame;
+    int count;
+    int color;
 
+    Surface ball;
 
 
    
@@ -41,10 +45,16 @@ public:
 
     void updatePosition();
 
-    void collide(Surface& surface);
+    void collide(Surface surface);
 
     void bounce();
 
     void createCrater(float centerX, float centerY);
+
+private:
+
+    Surface concreteFloor{ 0.7f,0.6f };
+    Surface treeFloor{ 0.5f,0.3f };
+    Surface normalFloor{ 0.5f,0.5f };
 };
 

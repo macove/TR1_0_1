@@ -1,82 +1,107 @@
 #include "Ball.h"
-
-#include <vector>
-#include <utility> 
-#include <cmath>   
+#include <Novice.h>  
+#include <imgui.h>
 
 void Ball::Initialize()
 {
     mass = 10.0f;
     radiusX = 25.0f;
     radiusY = 25.0f;
-    velocityX = 0.3f;
-    velocityY = 10.0f;
+    velocityX = 0.0f;
+    velocityY = 0.0f;
     gravity = 9.8f;
     positionX = 300.0f;
     positionY = 200.0f;
-    restitution = 0.5f;
-    friction = 0.3f;
     bouncing = false;
-    initialRadiusX = 0.0f;
-    initialRadiusY = 0.0f;
+    initialRadiusX = 25.0f;
+    initialRadiusY = 25.0f;
     depth = 10.0f;
     range = 30.0f;
     segments = 64.0f;
-    frame = 0.3f;
+    frame = 0.03f;
+    ball.restitution = 0.5f;
+    ball.friction = 0.3f;
+    count = 0;
+    color = 0xFFFFFFFF;
 }
 
 void Ball::Update()
 {
+    float ground = 600.0;
 
+
+        if (positionY + radiusY < ground) {
+            updatePosition();
+            radiusX = initialRadiusX;
+            radiusY = initialRadiusY;
+        } 
+        else if (mass >= 30.0f){
+                float craterCenterY = 600.0f + depth;
+                createCrater(positionX, craterCenterY);
+                positionY = craterCenterY-radiusY;
+            }else {
+            collide(concreteFloor);
+   
+            if (!bouncing) {
+                radiusX = initialRadiusX;
+                radiusY = initialRadiusY;
+            } /*else if
+            {
+
+            }*/
+
+             }
+
+        ImGui::Begin("Window");
+        ImGui::SliderFloat("ball mass", &mass, 0.0f, 50.0f, "mass = %.3f");
+        ImGui::End();
+    
 }
 
 void Ball::Draw()
 {
-
+    Novice::DrawEllipse(int(positionX), int(positionY), int(radiusX), int(radiusY), 0.0f, color, kFillModeSolid);
 }
 
 void Ball::updatePosition()
 {
     
-
     positionX += velocityX * frame;
 
     velocityY += gravity * frame;
     positionY += velocityY * frame;
 
-    std::cout << "New position: " << positionY << ", New velocity: " << velocityY << std::endl;
+    
 }
 
-void Ball::collide(Surface& surface) {
+void Ball::collide(Surface surface) {
     positionY = 600.0f - radiusY;  
 
-    float effectiveRestitution = (restitution + surface.restitution) / 2.0f;
+    float effectiveRestitution = (surface.restitution + ball.restitution) / 2.0f;
     velocityY = -velocityY * effectiveRestitution;  
 
-    float effectiveFriction = (friction + surface.friction) / 2.0f;
+    float effectiveFriction = (surface.friction + ball.friction) / 2.0f;
     float frictionForce = effectiveFriction * mass * gravity;
     float frictionAcceleration = frictionForce / mass;
     velocityY += (velocityY > 0 ? -1 : 1) * frictionAcceleration;
-    if (velocityY <= -5.0f) {
-   
-    bounce();
-    } else { bouncing = false; }
-
+ 
     positionY += velocityY;
 
 
-    if (std::abs(velocityY) < 10.0f) {
+    if (abs(velocityY) < 9.0f) {
         velocityY = 0;
+        bouncing = false;
+        positionY = 600.0f - radiusY;
+    } else {
+        bouncing = true; 
     }
 
     velocityX -= velocityX * effectiveFriction;
 
-    std::cout << "New velocity after collision: " << velocityY << std::endl;
+    count++;
+    radiusX /= 0.8f;
+    radiusY /= 1.5f;
 
-    if (mass >= 30.0f) {
-        float craterCenterY = 600.0f + depth;
-        createCrater(positionX, craterCenterY);
-    }
 }
 
 void Ball::bounce() {
@@ -87,17 +112,15 @@ void Ball::bounce() {
 
 void Ball::createCrater(float centerX, float centerY)
 {
-    std::vector<std::pair<float, float>> craterPoints;
     float step = 2 * range / segments;
 
-    for (int i = 0; i <= segments; ++i) {
-        float x = -range + i * step;
-        float y = -(depth / static_cast<float>(std::pow(range, 2))) * static_cast<float>(std::pow(x, 2));
-        craterPoints.push_back(std::make_pair(centerX + x, centerY + y));
-    }
+    for (int i = 0; i < segments; ++i) {
+        float x1 = -range + i * step;
+        float x2 = -range + (i + 1) * step;
+        float y1 = -(depth / (powf(range, 2))) * (powf(x1, 2));
+        float y2 = -(depth / (powf(range, 2))) * (powf(x2, 2));
 
-    for (const auto& point : craterPoints) {
-        std::cout << "Crater point: (" << point.first << ", " << point.second << ")" << std::endl;
+        Novice::DrawLine(int(centerX + x1),int( centerY + y1),int( centerX + x2), int(centerY + y2), 0xFFFFFFFF);
     }
 }
 

@@ -41,7 +41,7 @@
     <ClCompile Include="Ball.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
-    <ClCompile Include="Surface.cpp">
+    <ClCompile Include="SurfaceProperties.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
   </ItemGroup>
@@ -118,6 +118,6 @@
       <Filter>KamataEngine\Include</Filter>
     </ClInclude>
     <ClInclude Include="Ball.h" />
-    <ClInclude Include="Surface.h" />
+    <ClInclude Include="SurfaceProperties.h" />
   </ItemGroup>
 </Project>

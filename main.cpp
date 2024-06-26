@@ -1,6 +1,5 @@
 #include <Novice.h>
 #include "Ball.h"
-#include "Surface.h"
 #include <imgui.h>
 
 typedef struct vector2
@@ -24,7 +23,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Ball ball;
 	ball.Initialize();
 
-	Surface concrete(0.5f, 0.3f);
+	
 
 	
 
@@ -61,41 +60,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			ball.radiusX = ball.initialRadiusX;
 			ball.radiusY = ball.initialRadiusY;
 			ball.bouncing = false;
-			
-		}
-
-
-
-		if (ball.positionY + ball.radiusY < ground) {
-			ball.updatePosition();
-		} else {
-			ball.collide(concrete);
-			if (std::abs(ball.velocityY) < 0.5f) {  
-				ball.radiusX = ball.initialRadiusX; 
-				ball.radiusY = ball.initialRadiusY; 
-				ball.bouncing = false;
-			} else {
-				ball.radiusX /= 1.5f; 
-				ball.radiusY /= 0.8f; 
-			}
-		}
-
-		if (ball.bouncing) {
-			ball.frame += ball.frame;
-			if (ball.frame >= 0.1f) {
-				ball.radiusX /= 0.8f;
-				ball.radiusY /= 1.2f;
-				ball.bouncing = false;
-				if (ball.frame <= 0.3f) {
-					ball.radiusX = ball.initialRadiusX;
-					ball.radiusY = ball.initialRadiusY;
-				    ball.frame = 0.0f;
-				}
-			} 
+		
 			
 		}*/
 
-		
+		ball.Update();
 
 		///
 		/// ↑更新処理ここまで
@@ -105,21 +74,24 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
-		Novice::DrawEllipse(int(ball.positionX), int(ball.positionY), int(ball.radiusX), int(ball.radiusY), 0.0f, 0xFFFFFFFF, kFillModeSolid);
+		ball.Draw();
 
 		Novice::DrawLine(int(startLine.x), int(startLine.y), int(endLine.x), int(endLine.y), 0xFFFFFFFF);
 
-		
-
-		ImGui::Begin("Window");
-		ImGui::SliderFloat("floor Restitution", &concrete.restitution, 0.0f, 1.0f, "Restitution = %.3f");
-		ImGui::SliderFloat("floor Friction", &concrete.friction, 0.0f, 1.0f, "Friction = %.3f");
-		ImGui::SliderFloat("ball mass", &ball.mass, 0.0f, 50.0f, "mass = %.3f");
-		ImGui::SliderFloat("ball Restitution", &ball.restitution, 0.0f, 1.0f, "Restitution = %.3f");
-		ImGui::SliderFloat("ball Friction", &ball.friction, 0.0f, 1.0f, "Friction = %.3f");
-		ImGui::SliderFloat("ball velocityX", &ball.velocityX, 0.0f, 10.0f, "velocityX = %.3f");
+		//ImGui::SliderFloat("floor Restitution", &concrete.restitution, 0.0f, 1.0f, "Restitution = %.3f");
+		//ImGui::SliderFloat("floor Friction", &concrete.friction, 0.0f, 1.0f, "Friction = %.3f");
+		//ImGui::SliderFloat("ball mass", &ball.mass, 0.0f, 50.0f, "mass = %.3f");
+		//ImGui::SliderFloat("ball Restitution", &ball.restitution, 0.0f, 1.0f, "Restitution = %.3f");
+		//ImGui::SliderFloat("ball Friction", &ball.friction, 0.0f, 1.0f, "Friction = %.3f");
+		//ImGui::SliderFloat("ball velocityX", &ball.velocityX, 0.0f, 10.0f, "velocityX = %.3f");
 		//ImGui::SliderFloat("ball velocityY", &ball.velocityY, 0.0f, 10.0f, "velocityY = %.3f");
-		ImGui::End();
+		
+		Novice::ScreenPrintf(0, 0, "%d", ball.bouncing);
+		Novice::ScreenPrintf(0, 20, "%f", ball.positionY);
+		Novice::ScreenPrintf(0, 40, "%f", abs(ball.velocityY));
+		Novice::ScreenPrintf(0, 60, "%f", ball.velocityY);
+		//Novice::ScreenPrintf(0, 80, "%d", ball.endMove);
+		
 
 		///
 		/// ↑描画処理ここまで
