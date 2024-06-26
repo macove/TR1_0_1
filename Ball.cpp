@@ -23,6 +23,8 @@ void Ball::Initialize()
     ball.friction = 0.3f;
     count = 0;
     color = 0xFFFFFFFF;
+
+    input_ = Input::GetInstance();
 }
 
 void Ball::Update()
@@ -41,16 +43,22 @@ void Ball::Update()
                 positionY = craterCenterY-radiusY;
             }else {
             collide(concreteFloor);
-   
+            radiusX /= 1.5f;
+            radiusY /= 0.8f;
             if (!bouncing) {
                 radiusX = initialRadiusX;
                 radiusY = initialRadiusY;
-            } /*else if
-            {
-
-            }*/
+            }
 
              }
+
+        float speed = 0.9f;
+        bool rightPressed = input_->PushKey(DIK_RIGHT);
+        bool leftPressed = input_->PushKey(DIK_LEFT);
+        
+        if (rightPressed || leftPressed) {
+            positionX += rightPressed ? speed : -speed;
+        }
 
         ImGui::Begin("Window");
         ImGui::SliderFloat("ball mass", &mass, 0.0f, 50.0f, "mass = %.3f");

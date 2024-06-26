@@ -6,6 +6,7 @@ typedef struct vector2
 {
 	float x;
 	float y;
+
 }vector2;
 
 const char kWindowTitle[] = "学籍番号";
