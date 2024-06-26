@@ -20,22 +20,31 @@ public:
     float positionY;
     float restitution;  
     float friction;
-    bool hasTouchedGround;
     bool bouncing;
-    float bounceTime;
     float initialRadiusX; 
     float initialRadiusY;
+    float depth; 
+    float range;
+    float segments;
+    float frame;
 
-    Ball(float m, float rX, float rY, float vX, float vY, float g, float x, float y, float res, float fric) :
-        mass(m), radiusX(rX), radiusY(rY), velocityX(vX), velocityY(vY), gravity(g), positionX(x), positionY(y), restitution(res), friction(fric), hasTouchedGround(false), bouncing(false), bounceTime(0.0f), initialRadiusX(rX), initialRadiusY(rY) {}
 
-    void updatePosition(float time);
+
+   
+    void Initialize();
+
+    void Update();
+
+    void Draw();
+
+
+
+    void updatePosition();
 
     void collide(Surface& surface);
 
-    void resetTime();
-
     void bounce();
 
+    void createCrater(float centerX, float centerY);
 };
 
