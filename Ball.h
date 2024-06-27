@@ -3,6 +3,12 @@
 #include <cmath>
 #include <Input.h>
 
+enum class FloorType {
+    Concrete,
+    Tree,
+    Normal
+};
+
 typedef struct {
     float restitution; 
     float friction;    
@@ -30,10 +36,17 @@ public:
     float frame;
     int count;
     int color;
+    float angle;
+    bool isFalling;
+    bool isRising;
 
     Surface ball;
 
+    FloorType currentFloor;
 
+    Surface concreteFloor;
+    Surface treeFloor;
+    Surface normalFloor;
    
     void Initialize();
 
@@ -51,11 +64,11 @@ public:
 
     void createCrater(float centerX, float centerY);
 
+    void Reset();
+
 private:
 
-    Surface concreteFloor{ 0.7f,0.6f };
-    Surface treeFloor{ 0.5f,0.3f };
-    Surface normalFloor{ 0.5f,0.5f };
     Input* input_ = nullptr;
+   
 };
 
